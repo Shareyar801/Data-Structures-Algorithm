@@ -1,6 +1,7 @@
 //Intro, insert, traverse = //https://www.youtube.com/watch?v=ScdwdSCnXDU
 //Search, delete = https ://www.youtube.com/watch?v=kU9Lv3e_kxs
 //Visual understanding = https ://www.cs.usfca.edu/~galles/visualization/BST.html
+
 #include  <iostream>
 using namespace std;
 struct node
@@ -101,26 +102,6 @@ node* search_in_bst(node* root, int key)
     else if (root->data < key)
     {   //when value is greater than current node's value then moving cursor to right sub tree.
         return search_in_bst(root->right, key);
-    }
-}
-node* update_in_bst(node* root, int val, int replace_val_with)
-{
-    if (root == NULL)
-    {   //when tree is empty or cursor hits leave node.
-        return NULL;
-    }
-    if (root->data == val)
-    {   //when value is found.
-        root->data == replace_val_with;
-        return root;
-    }
-    if (root->data > val)
-    {   //when value is smaller than current node's value then moving cursor to left sub tree.
-        return search_in_bst(root->left, val);
-    }
-    else if (root->data < val)
-    {   //when value is greater than current node's value then moving cursor to right sub tree.
-        return search_in_bst(root->right, val);
     }
 }
 void traverseInOrder(node* root)
