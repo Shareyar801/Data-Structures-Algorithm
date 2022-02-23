@@ -1,0 +1,266 @@
+#include <iostream>
+using namespace std;
+struct node
+{
+    int data;
+    node* link;
+};
+
+void insertion_at_head(node** head, int val)
+{
+    node* new_node = new node();
+    new_node->data = val;
+    new_node->link = *head;
+    *head = new_node;
+}
+
+void insertion_at_middle(node** head, int val, int prev_val)
+{
+    node* new_node = new node();    //creating obj of node struct
+    node* temp = *head;             //creating temp variable
+
+    new_node->data = val;
+
+    while (temp->data != prev_val)
+    {
+        temp = temp->link;
+    }
+
+    new_node->link = temp->link;
+    temp->link = new_node;
+}
+
+void insertion_at_tail(node** head, int val)
+{
+    node* new_node = new node();
+    node* temp = *head;
+    new_node->data = val;
+    new_node->link = NULL;
+
+    while (temp->link != NULL)
+    {
+        temp = temp->link;
+    }
+    temp->link = new_node;
+}
+
+void insertion_at_any_point(node** head, int val, int prev_val)
+{
+    node* new_node = new node();
+    new_node->data = val;
+    if (prev_val == 0) //if user enter 0 the value will be inserted in head.
+    { 
+        //insertion at head is taking place.
+        new_node->link = *head;
+        *head = new_node;
+    }
+    else //if user enter a position that is in LL then value will be inserted after that.
+    { 
+        //insertion at tail and middle is taking place.
+        node* temp = *head;
+        while (temp->data != prev_val)
+        {
+            temp = temp->link;
+        }
+        new_node->link = temp->link;
+        temp->link = new_node;
+    }
+}
+
+void deletion_at_head(node** head)
+{
+    node* temp = *head;
+    *head = temp->link;
+    free(temp);
+}
+
+void deletion_at_middle(node** head, int prev_val)
+{
+    node* temp = *head;             //creating temp variable of node struct.
+    node* prev = NULL;              //creating another pointer variable of node struct.
+
+    while (temp->data != prev_val)  //loop will run untill desired value is found.
+    {
+        prev = temp;                //saving temp in prev
+        temp = temp->link;          //moving node
+    }
+    prev->link = temp->link;        //once loop is ended, saving link of nxt node into previous node.
+}
+
+void deletion_at_tail(node** head)
+{
+    node* temp = *head;
+    node* free_temp = NULL; //free temp is to save prev node of temp.
+
+    while (temp->link != NULL)
+    {
+        free_temp = temp;
+        temp = temp->link;
+    }
+    free_temp->link = NULL;
+    free(temp);
+}
+
+void deletion_at_any_point(node** head, int prev_val)
+{
+    if (prev_val == 0) //if user enter 0 the value will be inserted in head.
+    {
+        //deletion at head is taking place.
+        node* temp = *head;
+        *head = temp->link;
+        free(temp);
+    }
+    else //if user enter a position that is in LL then value will be inserted after that.
+    {
+        //deletion at tail and middle is taking place.
+        node* temp = *head;             
+        node* prev = NULL;              
+
+        while (temp->data != prev_val)  //loop will run untill desired value is found.
+        {
+            prev = temp;                
+            temp = temp->link;          
+        }
+        prev->link = temp->link;
+    }
+}
+
+void traverse(node* head)
+{
+    while (head != NULL)
+    {
+        cout << head->data << "  ";
+        head = head->link;
+    }
+}
+
+void reverse_traverse(node* head)
+{
+    if (head == NULL)
+    {
+        return;
+    }
+    else
+    {
+        reverse_traverse(head->link);
+        cout << head->data << "  "; //printing data.
+    }
+}
+
+void sort(node* head)
+{
+    node* temp1 = head;
+    node* temp2;
+
+    //simple bubble sorting example:
+    for (temp1 = head; temp1 != NULL; temp1 = temp1->link)
+    {
+        for (temp2 = temp1->link; temp2 != NULL; temp2 = temp2->link)
+        {
+            if (temp1->data > temp2->data)
+            {
+                swap(temp1->data, temp2->data);
+            }
+        }
+    }
+
+}
+
+void reverse_ll(node** head)
+{
+    node* current = *head;
+    node* prev = NULL, *next = NULL;
+
+    while (current != NULL)
+    {
+        next = current->link;
+        current->link = prev;   //reverse current node's pointer 
+        prev = current;
+        current = next;
+    }
+    *head = prev; //once loop is ended the tail will become new head.
+}
+
+int main()
+{
+    node* head = NULL;
+    int val, pos;
+
+    cout << "Link list: \n";
+    cout << "Insert value at head: ";
+    cin >> val;
+    insertion_at_head(&head, val);
+    cout << "Insert value at tail: ";
+    cin >> val;
+    insertion_at_tail(&head, val);
+    cout << "Insert value at head: ";
+    cin >> val;
+    insertion_at_head(&head, val);
+    cout << "Insert value at tail: ";
+    cin >> val;
+    insertion_at_tail(&head, val);
+
+    cout << "\nPrinting link: ";
+    traverse(head);
+
+    cout << "\n\nInsert value at middle: ";
+    cin >> val;
+    cout << "\nEnter previous value for insertion (0 for deletion in head): ";
+    cin >> pos;
+    insertion_at_any_point(&head, val, pos);
+
+    cout << "\nPrinting link: ";
+    traverse(head);
+
+    cout << "\nEnter value for deletion (0 for deletion in head): ";
+    cin >> pos;
+    deletion_at_any_point(&head, pos);
+
+    cout << "\nPrinting link: ";
+    traverse(head);
+
+    cout << "\n\nNOTE:deleting value at middle! ";
+    cout << "\nEnter previous value from deletion point: ";
+    cin >> pos;
+    deletion_at_middle(&head, pos);
+
+    cout << "\nPrinting link: ";
+    traverse(head);
+
+    cout << "\n\nInsert value at middle: ";
+    cin >> val;
+    cout << "Insert point value for insertion: ";
+    cin >> pos;
+    insertion_at_middle(&head, val, pos);
+
+    cout << "\nPrinting link: ";
+    traverse(head);
+
+    cout << "\n\nNOTE:deleting value at head! ";
+    deletion_at_head(&head);
+    cout << "\n\nNOTE:deleting value at tail! ";
+    deletion_at_tail(&head);
+
+    cout << "\nInsert of 80 value at head! ";
+    insertion_at_head(&head, 80);
+    cout << "Insert of 41 value at tail! ";
+    insertion_at_tail(&head, 41);
+
+    cout << "\nPrinting link: ";
+    traverse(head);
+    
+    cout << "\nNOTE:Printing sorted link list!\n";
+    sort(head);
+    traverse(head);
+
+    cout << "\nPrinting reverse link list: ";
+    reverse_traverse(head);
+
+    cout << "\n\nNOTE: Reversing LL! ";
+    reverse_ll(&head);
+
+    cout << "\nPrinting link: ";
+    traverse(head);
+    cout << endl << endl;
+}
+
