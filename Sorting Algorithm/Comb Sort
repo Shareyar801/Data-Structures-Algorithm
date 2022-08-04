@@ -1,0 +1,67 @@
+//01.website for code explaination : https://www.geeksforgeeks.org/comb-sort/
+//02.youtube video only for logic : https ://www.youtube.com/watch?v=n51GFZHXlYY
+
+#include  <iostream>
+using namespace std;
+
+int nextgap(int gap)
+{
+    gap = (gap * 10) / 13; //gap formula.
+    //the gap shrinks by 1.3 factor in every iteration.
+    if (gap < 1)
+    {   //if gap is less than 1 than we are considering gap as 1. 
+        return 1;
+    }
+    //otherwise returning gap.
+    return gap;
+}
+
+void CombSort(int arr[], int n)
+{
+    int gap = n;    //for now condifering gap equal to n which is size of array.
+    bool swapped = true;
+
+    while ((gap != 1) || (swapped == true))
+    {
+        gap = nextgap(gap);
+        swapped = false;
+
+        for (size_t i = 0; i < n - gap; i++)
+        {
+            if (arr[i] > arr[i + gap])
+            {
+                //simple swapping technique
+                int temp = arr[i];
+                arr[i] = arr[i + gap];
+                arr[i + gap] = temp;
+                swapped = true;
+                //swapped variable will stay true till there is larger value (i+gap) than current value (i).
+            }
+        }
+        //soon as swapped becomes false the loop will terminated.
+        //loop will also terminate when gap is equal to 1.
+    }
+}
+
+int main()
+{
+    int arr[10] = { 12, 34, 54, 69, 3, 15, 99, 58, 1,49 };
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    cout << "======COMB SORT:";
+    cout << "\nPrinting array in its orginal condition: ";
+    for (int i = 0; i < n; i++)
+    {
+        cout << arr[i] << " ";
+    }
+
+    CombSort(arr, n);
+
+    cout << "\n\nPrinting array after sorting: ";
+    for (size_t i = 0; i < n; i++)
+    {
+        cout << arr[i] << "  ";
+    }
+
+    return 0;
+}
